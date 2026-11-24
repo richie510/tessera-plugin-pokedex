@@ -8,9 +8,10 @@
 > may run off the bottom: turn off **Base stats** there. Pokémon data and sprites come from
 > [PokéAPI](https://pokeapi.co). Feel free to fork it; issues and pull requests may not get an answer.
 
-A screensaver step of its own for Tessera, built the way the Night clock is: it shows one Pokémon's dex entry over the
+A screensaver step of its own for Tessera: it shows one Pokémon's dex entry over the
 glass while the entity you choose for it is on (an input_boolean, a switch or a binary_sensor), and gives way to the
-next step of the screensaver's order when that entity is off. So one switch in Home Assistant turns it on and off.
+next step of the screensaver's order when that entity is off. So one switch in Home Assistant turns it on and off, by
+hand or from an automation or schedule (say, Pokémon in the kids' room by day and a plain clock at night).
 
 Each entry has the Pokémon's painted artwork (or its classic pixel sprite), its number, name and kind, its types, its
 six base stats as bars, its height and weight, and the few lines the Pokédex says about it. It takes a new Pokémon
@@ -32,7 +33,7 @@ It is the Tessera version of the [Tesserae Pokédex widget](https://github.com/r
 5. In the step's drawer, choose how often a new Pokémon comes, which pool it comes from, artwork or pixel sprite, and
    whether to show the base stats and the dex text. Turn the stats off for a bigger picture.
 
-Turn the toggle off and the screensaver goes on to the next step, as it does when the Night clock's entity is off.
+Turn the toggle off and the screensaver goes on to the next step in its order.
 
 ## Good to know
 

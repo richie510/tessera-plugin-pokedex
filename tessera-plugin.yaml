@@ -1,5 +1,5 @@
 # Pokédex: a screensaver step of its own (plugin API 0.27, docs/FIRMWARE_API.md "A screensaver" in the tessera-plugins
-# repository), built like the Night clock: it shows while the entity you choose for it is on (an input_boolean, a
+# repository): it shows while the entity you choose for it is on (an input_boolean, a
 # switch or a binary_sensor), and gives way to the next step of the screensaver's order when that entity is off.
 # It shows one Pokémon's dex entry over the glass: its sprite or artwork, number, name, kind, types, base stats and its
 # Pokédex text. A new one every few minutes, one a day, or always the same one.
@@ -46,7 +46,7 @@ fetch:
         dex3: "dex[3]"
 
 savers:
-  # A step of its own, as the Night clock: shown while the chosen entity (an input_boolean such as
+  # A step of its own, shown while the chosen entity (an input_boolean such as
   # input_boolean.tab5_pokedex) is on. Put it where you like in the Screensaver card's order; when the entity is off,
   # the next step shows.
   - id: dex

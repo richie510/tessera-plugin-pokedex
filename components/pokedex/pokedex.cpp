@@ -48,7 +48,7 @@ static std::string decimal(float value) {
   return out;
 }
 
-// The screensaver: a step of its own, as the Night clock, shown while its entity is on. It picks a Pokémon (a new one
+// The screensaver: a step of its own, shown while its entity is on. It picks a Pokémon (a new one
 // every few minutes, one a day, or always the same), asks the app for its entry (the fetch `entry`, plugin API 0.27),
 // and draws its picture on the left (on top of a glass that stands up) with the words and the stats beside it.
 //
