@@ -1,5 +1,13 @@
 # Pokédex
 
+> **A proof of concept, not a maintained project.** Claude (Anthropic's AI assistant) ported the
+> [Tesserae Pokédex widget](https://github.com/richie510/tesserae-widget-pokedex) (made for
+> [dmellok's Tesserae](https://github.com/dmellok/tesserae-widgets) e-ink dashboards) to a
+> [Tessera](https://github.com/MaxGramser/tessera-plugins) screensaver plugin; I only beta tested it. It has been tried
+> on an M5Stack Tab5 and a 4" Guition (480x480). Smaller screens, such as 480x320 boards or the CYD, are untested and
+> may run off the bottom: turn off **Base stats** there. Pokémon data and sprites come from
+> [PokéAPI](https://pokeapi.co). Feel free to fork it; issues and pull requests may not get an answer.
+
 A screensaver step of its own for Tessera, built the way the Night clock is: it shows one Pokémon's dex entry over the
 glass while the entity you choose for it is on (an input_boolean, a switch or a binary_sensor), and gives way to the
 next step of the screensaver's order when that entity is off. So one switch in Home Assistant turns it on and off.
