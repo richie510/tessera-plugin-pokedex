@@ -4,7 +4,7 @@
 # It shows one Pokémon's dex entry over the glass: its sprite or artwork, number, name, kind, types, base stats and its
 # Pokédex text. A new one every few minutes, one a day, or always the same one.
 id: pokedex
-version: 0.1.0
+version: 0.2.0
 # 0.14 for the screensaver, 0.27 for the fetch the screen asks for (`asked`) and for 12 fields in its map.
 api: "0.27"
 icon: lightning-bolt
