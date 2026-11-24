@@ -1,5 +1,7 @@
 {
-  "_meta": { "name": "Nederlands" },
+  "_meta": {
+    "name": "Nederlands"
+  },
   "screen": {
     "waiting": "Op zoek naar een Pokémon...",
     "failed": "De Pokédex is niet bereikbaar. Zo meteen opnieuw.",
@@ -31,6 +33,8 @@
     "pool_all": "Alle (1025)",
     "artwork": "Getekend plaatje",
     "artwork_hint": "Uit toont de klassieke pixelsprite.",
+    "stats": "Basisstats",
+    "stats_hint": "De zes statbalken. Uit geeft het plaatje hun ruimte.",
     "dex_text": "Pokédex-tekst",
     "dex_text_hint": "De paar regels van de Pokédex, onder de stats."
   }

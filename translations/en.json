@@ -1,5 +1,7 @@
 {
-  "_meta": { "name": "English" },
+  "_meta": {
+    "name": "English"
+  },
   "screen": {
     "waiting": "Looking for a Pokémon...",
     "failed": "The Pokédex could not be reached. Trying again soon.",
@@ -31,6 +33,8 @@
     "pool_all": "All (1025)",
     "artwork": "Painted artwork",
     "artwork_hint": "Off shows the classic pixel sprite instead.",
+    "stats": "Base stats",
+    "stats_hint": "The six stat bars. Off gives the picture their room.",
     "dex_text": "Dex entry",
     "dex_text_hint": "The Pokédex's few lines about it, under the stats."
   }

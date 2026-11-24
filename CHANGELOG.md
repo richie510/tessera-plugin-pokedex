@@ -4,6 +4,7 @@
 
 - A layout of its own for square screens such as the 4-inch Guition: a large picture on top, the name and types
   centred under it, the stats in two columns and the dex text at the foot. Wide screens look as before.
+- A Base stats switch beside Dex entry: turn the stats off and the picture grows into their room.
 
 ## 0.1.0
 

@@ -22,7 +22,7 @@ It is the Tessera version of the [Tesserae Pokédex widget](https://github.com/r
 4. Choose **Add from plugins** and add the **Pokédex** step. Choose its entity (the toggle from step 1) and drag the step
    where you want it in the order: first, to show it whenever the toggle is on.
 5. In the step's drawer, choose how often a new Pokémon comes, which pool it comes from, artwork or pixel sprite, and
-   whether to show the dex text.
+   whether to show the base stats and the dex text. Turn the stats off for a bigger picture.
 
 Turn the toggle off and the screensaver goes on to the next step, as it does when the Night clock's entity is off.
 

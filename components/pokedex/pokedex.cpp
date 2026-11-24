@@ -72,6 +72,7 @@ class DexSaver : public tessera::Saver {
     last_ = pool_last(c.options["pool"] | "gen1");
     artwork_ = c.options["artwork"] | true;
     dex_text_ = c.options["dex_text"] | true;
+    stats_ = c.options["stats"] | true;
     lay_out(c);
     ask(next_number(tessera::epoch()));
   }
@@ -138,12 +139,12 @@ class DexSaver : public tessera::Saver {
       picture_ = ui::picture(c.parent, tessera::Placeholder::NONE);
       int side;
       if (upright) {
-        side = std::min(w, h * 2 / 5);
+        side = std::min(w, stats_ ? h * 2 / 5 : h / 2);
         lv_obj_set_pos(picture_, (c.width - side) / 2, y);
         y += side + gap;
         h -= side + gap;
       } else {
-        side = std::min(h, w * 2 / 5);
+        side = std::min(h, stats_ ? w * 2 / 5 : w / 2);
         lv_obj_set_pos(picture_, x, (c.height - side) / 2);
         x += side + gap;
         w -= side + gap;
@@ -155,7 +156,7 @@ class DexSaver : public tessera::Saver {
     const int body = ui::line_height(Font::BODY), title = ui::line_height(Font::TITLE);
     const int headline = ui::line_height(Font::HEADLINE), small_gap = ui::px(6);
     const int badge_h = body + ui::px(8), row_h = body + ui::px(6);
-    const int fixed = title + headline + body + small_gap + badge_h + small_gap + 6 * row_h + small_gap + body;
+    const int fixed = title + headline + body + small_gap + badge_h + small_gap + (stats_ ? 6 * row_h : 0) + small_gap + body;
     const int dex_max = dex_text_ ? 4 * body : 0;
     const int dex_h = dex_text_ ? std::max(0, std::min(dex_max, h - fixed - small_gap)) : 0;
     const int used = fixed + (dex_h > 0 ? small_gap + dex_h : 0);
@@ -172,14 +173,16 @@ class DexSaver : public tessera::Saver {
     make_badges(c.parent, x, top, badge_h, body);
     top += badge_h + small_gap;
 
-    // Stats: the name, a bar over its track, the number at the end.
-    int name_w = 0;
-    for (const char *key : STAT_KEYS) name_w = std::max(name_w, ui::text_width(plugin_->text(key), Font::BODY));
-    const int value_w = ui::text_width("888", Font::BODY);
-    track_w_ = std::max(ui::px(20), w - name_w - value_w - ui::px(20));
-    for (int i = 0; i < 6; ++i) {
-      make_stat(c.parent, i, x, top, name_w, value_w, body);
-      top += row_h;
+    // Stats, unless the person turned them off: the name, a bar over its track, the number at the end.
+    if (stats_) {
+      int name_w = 0;
+      for (const char *key : STAT_KEYS) name_w = std::max(name_w, ui::text_width(plugin_->text(key), Font::BODY));
+      const int value_w = ui::text_width("888", Font::BODY);
+      track_w_ = std::max(ui::px(20), w - name_w - value_w - ui::px(20));
+      for (int i = 0; i < 6; ++i) {
+        make_stat(c.parent, i, x, top, name_w, value_w, body);
+        top += row_h;
+      }
     }
     top += small_gap;
     size_ = line(c.parent, Font::BODY, theme::MUTED, x, top, w);
@@ -192,7 +195,8 @@ class DexSaver : public tessera::Saver {
   }
 
   // A square glass: the picture large and centred on top; the name with its number, the kind with the size, and the
-  // types centred under it; the six stats in two columns of three; the dex text centred at the foot. paint() centres
+  // types centred under it; the six stats in two columns of three (unless turned off: the picture grows instead); the
+  // dex text centred at the foot. paint() centres
   // the rows whose width depends on the entry.
   void lay_out_card(const tessera::SaverContext &c) {
     card_ = true;
@@ -200,8 +204,11 @@ class DexSaver : public tessera::Saver {
     const int body = ui::line_height(Font::BODY), title = ui::line_height(Font::TITLE);
     const int headline = ui::line_height(Font::HEADLINE), small_gap = ui::px(8);
     const int badge_h = body + ui::px(8), row_h = body + ui::px(6);
-    const int words = headline + body + small_gap + badge_h + small_gap + 3 * row_h;
-    const int side = std::max(ui::mm(10), std::min(w, (c.height - 2 * margin) * 2 / 5));
+    const int words = headline + body + small_gap + badge_h + (stats_ ? small_gap + 3 * row_h : 0);
+    // Without the stats the picture takes their room too, leaving three lines for the dex text.
+    const int h = c.height - 2 * margin;
+    const int roomy = h - words - (dex_text_ ? small_gap + 3 * body : 0);
+    const int side = std::max(ui::mm(10), std::min(w, stats_ ? h * 2 / 5 : std::min(roomy, h * 3 / 5)));
     // The dex text in what is left, up to three lines centred; a longer entry ends with dots.
     const int left = c.height - 2 * margin - side - words - small_gap;
     const int dex_h = dex_text_ && left >= body ? std::min(3 * body, left) : 0;
@@ -225,19 +232,9 @@ class DexSaver : public tessera::Saver {
     top += body + small_gap;
 
     make_badges(c.parent, margin, top, badge_h, body);
-    top += badge_h + small_gap;
-
-    // Two columns of three stats, a gap between them.
-    const int column_gap = ui::mm(5), column_w = (w - column_gap) / 2;
-    int name_w = 0;
-    for (const char *key : STAT_KEYS) name_w = std::max(name_w, ui::text_width(plugin_->text(key), Font::BODY));
-    const int value_w = ui::text_width("888", Font::BODY);
-    track_w_ = std::max(ui::px(20), column_w - name_w - value_w - ui::px(20));
-    for (int i = 0; i < 6; ++i) {
-      const int x = margin + (i < 3 ? 0 : column_w + column_gap);
-      make_stat(c.parent, i, x, top + (i % 3) * row_h, name_w, value_w, body);
-    }
-    top += 3 * row_h + small_gap;
+    top += badge_h;
+    if (stats_) top += small_gap + lay_out_columns(c.parent, margin, top + small_gap, w, body, row_h);
+    top += small_gap;
 
     if (dex_h > 0) {
       dex_ = ui::text(c.parent, Font::BODY, theme::INK_SOFT);
@@ -245,6 +242,20 @@ class DexSaver : public tessera::Saver {
       lv_obj_set_pos(dex_, margin, top);
       lv_obj_set_style_text_align(dex_, LV_TEXT_ALIGN_CENTER, 0);
     }
+  }
+
+  // Two columns of three stats, a gap between them, from `top`; returns their height.
+  int lay_out_columns(lv_obj_t *parent, int margin, int top, int w, int body, int row_h) {
+    const int column_gap = ui::mm(5), column_w = (w - column_gap) / 2;
+    int name_w = 0;
+    for (const char *key : STAT_KEYS) name_w = std::max(name_w, ui::text_width(plugin_->text(key), Font::BODY));
+    const int value_w = ui::text_width("888", Font::BODY);
+    track_w_ = std::max(ui::px(20), column_w - name_w - value_w - ui::px(20));
+    for (int i = 0; i < 6; ++i) {
+      const int x = margin + (i < 3 ? 0 : column_w + column_gap);
+      make_stat(parent, i, x, top + (i % 3) * row_h, name_w, value_w, body);
+    }
+    return 3 * row_h;
   }
 
   void make_badges(lv_obj_t *parent, int x, int y, int badge_h, int body) {
@@ -338,7 +349,7 @@ class DexSaver : public tessera::Saver {
     }
 
     JsonArrayConst stats = r["stats"];
-    for (int i = 0; i < 6; ++i) {
+    for (int i = 0; i < 6 && bar_[i]; ++i) {
       const int v = static_cast<int>(stats[i] | 0.0f);  // a number may come as 35 or 35.0
       ui::set_text(value_[i], v ? std::to_string(v) : "");
       const int fill = std::max(ui::px(3), track_w_ * std::min(v, STAT_MAX) / STAT_MAX);
@@ -416,7 +427,7 @@ class DexSaver : public tessera::Saver {
   uint32_t every_s_ = 300, started_ = 0, failed_at_ = 0, asked_ = 0;
   long day_ = 0;
   int pick_ = 25, last_ = 151, number_ = 0, track_w_ = 0, badge_x_ = 0, badge_y_ = 0, badge_h_ = 0, width_ = 0, name_y_ = 0;
-  bool card_ = false, artwork_ = true, dex_text_ = true, failed_ = false, shown_ = false, fell_back_ = false;
+  bool card_ = false, artwork_ = true, dex_text_ = true, stats_ = true, failed_ = false, shown_ = false, fell_back_ = false;
   lv_obj_t *picture_{}, *number_label_{}, *name_{}, *genus_{}, *size_{}, *dex_{};
   lv_obj_t *badge_[2]{}, *badge_text_[2]{}, *bar_[6]{}, *value_[6]{};
 };
