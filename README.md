@@ -11,7 +11,7 @@
 A screensaver step of its own for Tessera: it shows one Pokémon's dex entry over the
 glass while the entity you choose for it is on (an input_boolean, a switch or a binary_sensor), and gives way to the
 next step of the screensaver's order when that entity is off. So one switch in Home Assistant turns it on and off, by
-hand or from an automation or schedule (say, Pokémon in the kids' room by day and a plain clock at night).
+hand or from an automation or schedule (say, Pokémon by day and another step at night).
 
 Each entry has the Pokémon's painted artwork (or its classic pixel sprite), its number, name and kind, its types, its
 six base stats as bars, its height and weight, and the few lines the Pokédex says about it. It takes a new Pokémon
